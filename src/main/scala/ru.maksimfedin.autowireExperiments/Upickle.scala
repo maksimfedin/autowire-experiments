@@ -12,7 +12,7 @@ trait MyApi {
 }
 
 object MyApiImpl extends MyApi {
-    def doThing(i: Int, s: String) = Seq.fill(i)(s)
+    def doThing(i: Int, s: String): Seq[String] = Seq.fill(i)(s)
 }
 
 object MyServer extends autowire.Server[String, upickle.default.Reader, upickle.default.Writer] {
@@ -20,7 +20,7 @@ object MyServer extends autowire.Server[String, upickle.default.Reader, upickle.
 
     def read[Result: upickle.default.Reader](p: String) = upickle.default.read[Result](p)
 
-    val routes = MyServer.route[MyApi](MyApiImpl)
+    val routes: MyServer.Router = MyServer.route[MyApi](MyApiImpl)
 }
 
 // client-side implementation, and call-site
